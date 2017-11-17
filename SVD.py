@@ -21,22 +21,28 @@ if not os.path.exists(image_path):
     print("File does not exist at the specified path")
     sys.exit()
 
-# Opening the specified image file
-img = Image.open(image_path)
+try:
+    # Opening the specified image file
+    img = Image.open(image_path)
 
-# Getting the resolution of the image
-col, row = img.size
-print("Original image resolution: ", col, "x", row)
+    # Getting the resolution of the image
+    col, row = img.size
+    print("Original image resolution: ", col, "x", row)
 
-# Getting the original size of the image in bytes before compression
-img_size = (os.path.getsize(image_path))
+    # Getting the original size of the image in bytes before compression
+    img_size = (os.path.getsize(image_path))
 
-# img_size is in bytes.
-# To print the image size in a more convenient way i.e., in Kilo Bytes we use humanize library
-print("Original image size: ", humanize.naturalsize(img_size, binary=True), " (", img_size, " bytes)")
+    # img_size is in bytes.
+    # To print the image size in a more convenient way i.e., in Kilo Bytes we use humanize library
+    print("Original image size: ", humanize.naturalsize(img_size, binary=True), " (", img_size, " bytes)")
 
-# Converting img to a matrix
-im = np.array(img)
+    # Converting img to a matrix
+    im = np.array(img)
+
+except Exception as e:
+    print(e)
+    print("File specified is not an image file!")
+    sys.exit()
 
 # Ask for confirmation
 choice = input("Do you want to continue?[Y(es)]: ")
@@ -104,9 +110,6 @@ try:
     img_recon[:, :, 0] = img_red_k
     img_recon[:, :, 1] = img_green_k
     img_recon[:, :, 2] = img_blue_k
-
-    # Getting the size of the matrix (i.e row, column) tells us the resolution of the image
-    row, col, _ = img_recon.shape
 
     # Converting the matrix to image and saving the image at image_save_path
     scipy.misc.toimage(img_recon).save(image_save_path)
